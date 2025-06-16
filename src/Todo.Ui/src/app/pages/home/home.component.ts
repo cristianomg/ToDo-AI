@@ -7,11 +7,12 @@ import { TaskService, Task, TaskStatus, TaskType, TaskPriority, CreateTaskForm }
 import { AuthService, User } from '../../services/auth.service';
 import { TaskCardComponent } from '../../components/task-card/task-card.component';
 import { CreateTaskModalComponent } from '../../components/create-task-modal/create-task-modal.component';
+import { CustomDatepickerComponent } from '../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, DragDropModule, TaskCardComponent, CreateTaskModalComponent],
+  imports: [CommonModule, FormsModule, DragDropModule, TaskCardComponent, CreateTaskModalComponent, CustomDatepickerComponent],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })

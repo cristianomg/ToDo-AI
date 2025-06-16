@@ -2,11 +2,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TaskService, TaskType, TaskPriority, CreateTaskForm } from '../../services/task.service';
+import { CustomDatepickerComponent } from '../custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-create-task-modal',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CustomDatepickerComponent],
   templateUrl: './create-task-modal.component.html'
 })
 export class CreateTaskModalComponent {

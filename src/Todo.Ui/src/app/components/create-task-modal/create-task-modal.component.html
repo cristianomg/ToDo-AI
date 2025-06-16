@@ -54,19 +54,23 @@
                             <input type="checkbox" id="isRecurring" name="isRecurring" [(ngModel)]="form.isRecurring"
                                 (change)="onRecurringChange()"
                                 class="h-4 w-4 rounded border border-input bg-background text-primary focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
-                            <label for="isRecurring" class="text-sm font-medium text-foreground">Tarefa Recorrente</label>
+                            <label for="isRecurring" class="text-sm font-medium text-foreground">Tarefa
+                                Recorrente</label>
                         </div>
                     </div>
 
                     <div class="space-y-2" *ngIf="form.isRecurring">
-                        <label for="recurrenceEndDate" class="text-sm font-medium text-foreground">Data de Fim da Recorrência *</label>
-                        <input type="date" id="recurrenceEndDate" name="recurrenceEndDate" [(ngModel)]="form.recurrenceEndDate"
-                            [required]="form.isRecurring"
-                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                        <label for="recurrenceEndDate" class="text-sm font-medium text-foreground">Data de Fim da
+                            Recorrência *</label>
+                        <app-custom-datepicker [(ngModel)]="form.recurrenceEndDate" inputId="recurrenceEndDate">
+                        </app-custom-datepicker>
                         <p class="text-xs text-muted-foreground">
-                            <span *ngIf="form.type === TaskType.Daily">Serão criadas tarefas diárias até a data informada.</span>
-                            <span *ngIf="form.type === TaskType.Weekly">Serão criadas tarefas semanais até a data informada.</span>
-                            <span *ngIf="form.type === TaskType.Monthly">Serão criadas tarefas mensais até a data informada.</span>
+                            <span *ngIf="form.type === TaskType.Daily">Serão criadas tarefas diárias até a data
+                                informada.</span>
+                            <span *ngIf="form.type === TaskType.Weekly">Serão criadas tarefas semanais até a data
+                                informada.</span>
+                            <span *ngIf="form.type === TaskType.Monthly">Serão criadas tarefas mensais até a data
+                                informada.</span>
                         </p>
                     </div>
                 </div>
