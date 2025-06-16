@@ -46,7 +46,6 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Inicializar a data com o formato correto para o input HTML
     this.selectedDate = this.formatDateForInput(new Date());
     console.log('Data inicializada:', this.selectedDate);
     this.loadTasks();
@@ -239,5 +238,9 @@ export class HomeComponent implements OnInit {
   logout(): void {
     this.authService.clearCurrentUser();
     this.router.navigate(['/login']);
+  }
+
+  onTaskDeleted(taskId: number): void {
+    this.loadTasks();
   }
 }

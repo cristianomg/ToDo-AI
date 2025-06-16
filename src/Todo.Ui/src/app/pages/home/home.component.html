@@ -52,7 +52,8 @@
                 <div class="board-content" id="pending-container" cdkDropList [cdkDropListData]="pendingTasks"
                     [cdkDropListConnectedTo]="['in-progress-container', 'completed-container']"
                     (cdkDropListDropped)="onDrop($event)">
-                    <app-task-card *ngFor="let task of pendingTasks; trackBy: trackByTaskId" [task]="task">
+                    <app-task-card *ngFor="let task of pendingTasks; trackBy: trackByTaskId" [task]="task"
+                        (taskDeleted)="onTaskDeleted($event)">
                     </app-task-card>
                     <div *ngIf="pendingTasks.length === 0" class="empty-state">
                         Nenhuma tarefa a fazer
@@ -69,7 +70,8 @@
                 <div class="board-content" id="in-progress-container" cdkDropList [cdkDropListData]="inProgressTasks"
                     [cdkDropListConnectedTo]="['pending-container', 'completed-container']"
                     (cdkDropListDropped)="onDrop($event)">
-                    <app-task-card *ngFor="let task of inProgressTasks; trackBy: trackByTaskId" [task]="task">
+                    <app-task-card *ngFor="let task of inProgressTasks; trackBy: trackByTaskId" [task]="task"
+                        (taskDeleted)="onTaskDeleted($event)">
                     </app-task-card>
                     <div *ngIf="inProgressTasks.length === 0" class="empty-state">
                         Nenhuma tarefa em andamento
@@ -86,7 +88,8 @@
                 <div class="board-content" id="completed-container" cdkDropList [cdkDropListData]="completedTasks"
                     [cdkDropListConnectedTo]="['pending-container', 'in-progress-container']"
                     (cdkDropListDropped)="onDrop($event)">
-                    <app-task-card *ngFor="let task of completedTasks; trackBy: trackByTaskId" [task]="task">
+                    <app-task-card *ngFor="let task of completedTasks; trackBy: trackByTaskId" [task]="task"
+                        (taskDeleted)="onTaskDeleted($event)">
                     </app-task-card>
                     <div *ngIf="completedTasks.length === 0" class="empty-state">
                         Nenhuma tarefa concluída

@@ -1,9 +1,15 @@
 <div class="task-card" cdkDrag>
     <div class="task-header">
         <h4>{{ task.title }}</h4>
-        <span class="priority-badge" [class]="getPriorityClass(task.priority)">
-            {{ getPriorityLabel(task.priority) }}
-        </span>
+        <div class="header-actions">
+            <span class="priority-badge" [class]="getPriorityClass(task.priority)">
+                {{ getPriorityLabel(task.priority) }}
+            </span>
+            <button class="delete-btn" (click)="deleteTask()" title="Excluir tarefa">
+                🗑️
+            </button>
+
+        </div>
     </div>
     <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
     <div class="task-meta">
@@ -11,8 +17,5 @@
         <span [class]="getDateClass()">
             📅 {{ getDateLabel() }} {{ task.dueDate | date:'dd/MM/yyyy' }}
         </span>
-    </div>
-    <div class="drag-handle" cdkDragHandle>
-        <span class="drag-icon">⋮⋮</span>
     </div>
 </div>

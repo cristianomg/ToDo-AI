@@ -1,7 +1,7 @@
-import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CdkDrag } from '@angular/cdk/drag-drop';
-import { Task, TaskPriority, TaskType } from '../../services/task.service';
+import { Task, TaskPriority, TaskType, TaskService } from '../../services/task.service';
 
 @Component({
   selector: 'app-task-card',
@@ -13,7 +13,9 @@ import { Task, TaskPriority, TaskType } from '../../services/task.service';
 })
 export class TaskCardComponent {
   @Input() task!: Task;
+  @Output() taskDeleted = new EventEmitter<number>();
 
+  constructor(private taskService: TaskService) { }
 
   getPriorityLabel(priority: TaskPriority): string {
     switch (priority) {
@@ -62,5 +64,19 @@ export class TaskCardComponent {
       return 'task-date overdue';
     }
     return 'task-date';
+  }
+
+  deleteTask(): void {
+    if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
+      this.taskService.deleteTask(this.task.id).subscribe({
+        next: () => {
+          this.taskDeleted.emit(this.task.id);
+        },
+        error: (error) => {
+          console.error('Erro ao excluir tarefa:', error);
+          alert('Erro ao excluir tarefa. Tente novamente.');
+        }
+      });
+    }
   }
 } 
