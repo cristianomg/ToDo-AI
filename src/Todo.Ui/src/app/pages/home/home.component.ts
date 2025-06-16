@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CdkDragDrop, DragDropModule, moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
-import { TaskService, Task, TaskStatus, TaskType, TaskPriority } from '../../services/task.service';
+import { TaskService, Task, TaskStatus, TaskType, TaskPriority, CreateTaskForm } from '../../services/task.service';
 import { AuthService, User } from '../../services/auth.service';
 import { TaskCardComponent } from '../../components/task-card/task-card.component';
-import { CreateTaskModalComponent, CreateTaskForm } from '../../components/create-task-modal/create-task-modal.component';
+import { CreateTaskModalComponent } from '../../components/create-task-modal/create-task-modal.component';
 
 @Component({
   selector: 'app-home',
@@ -48,10 +48,31 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedDate = this.formatDateForInput(new Date());
-    console.log('Data inicializada:', this.selectedDate);
     this.loadTasks();
     this.loadCurrentUser();
     this.loadTheme();
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
+    if (this.darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  loadTheme(): void {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      this.darkMode = true;
+      document.documentElement.classList.add('dark');
+    } else {
+      this.darkMode = false;
+      document.documentElement.classList.remove('dark');
+    }
   }
 
   // Método para formatar data para o input HTML (YYYY-MM-DD)
@@ -117,21 +138,16 @@ export class HomeComponent implements OnInit {
   onCreateTask(taskData: CreateTaskForm): void {
     if (!this.currentUser) return;
 
-    const newTask = {
-      title: taskData.title,
-      description: taskData.description,
-      type: taskData.type,
-      priority: taskData.priority
-    };
-
-    this.taskService.createTask(newTask).subscribe({
-      next: (createdTask) => {
-        this.selectedTaskType = newTask.type;
+    this.taskService.createRecurringTasks(taskData).subscribe({
+      next: (createdTasks) => {
+        console.log(`${createdTasks.length} tarefa(s) criada(s) com sucesso`);
+        this.selectedTaskType = taskData.type;
         this.selectedDate = this.formatDateForInput(new Date());
         this.loadTasks();
       },
       error: (error) => {
-        console.error('Erro ao criar tarefa:', error);
+        console.error('Erro ao criar tarefa(s):', error);
+        alert('Erro ao criar tarefa(s). Tente novamente.');
       }
     });
   }
@@ -245,32 +261,11 @@ export class HomeComponent implements OnInit {
   }
 
   onTaskDeleted(taskId: number): void {
+    // Remove a tarefa dos arrays locais
     this.tasks = this.tasks.filter(task => task.id !== taskId);
     this.pendingTasks = this.pendingTasks.filter(task => task.id !== taskId);
     this.inProgressTasks = this.inProgressTasks.filter(task => task.id !== taskId);
     this.completedTasks = this.completedTasks.filter(task => task.id !== taskId);
     this.cdr.markForCheck();
-  }
-
-  toggleDarkMode(): void {
-    this.darkMode = !this.darkMode;
-    if (this.darkMode) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  }
-
-  loadTheme(): void {
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark') {
-      this.darkMode = true;
-      document.documentElement.classList.add('dark');
-    } else {
-      this.darkMode = false;
-      document.documentElement.classList.remove('dark');
-    }
   }
 }

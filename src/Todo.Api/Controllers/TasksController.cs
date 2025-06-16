@@ -38,7 +38,8 @@ public class TasksController : ControllerBase
     {
         command.UserId = userId;
         var result = await _mediator.Send(command);
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        
+        return Ok(result);
     }
 
     [HttpPut("{id}")]

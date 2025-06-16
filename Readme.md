@@ -14,7 +14,7 @@ Este projeto tem como objetivo criar um sistema de **gerenciamento de tarefas** 
 ---
 
 ### 🧪 Fase 2: Organização e Automação
-- [ ] Tarefas recorrentes (diária, semanal, mensal)
+- [x] Tarefas recorrentes (diária, semanal, mensal)
 - [ ] Lembretes e notificações
 - [ ] Subtarefas (checklists)
 - [ ] Barra de progresso por dia, semana e mês

@@ -1,14 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TaskService, TaskType, TaskPriority } from '../../services/task.service';
-
-export interface CreateTaskForm {
-  title: string;
-  description: string;
-  type: TaskType;
-  priority: TaskPriority;
-}
+import { TaskService, TaskType, TaskPriority, CreateTaskForm } from '../../services/task.service';
 
 @Component({
   selector: 'app-create-task-modal',
@@ -25,7 +18,9 @@ export class CreateTaskModalComponent {
     title: '',
     description: '',
     type: TaskType.Daily,
-    priority: TaskPriority.Medium
+    priority: TaskPriority.Medium,
+    isRecurring: false,
+    recurrenceEndDate: undefined
   };
 
   // Enums para o template
@@ -74,18 +69,26 @@ export class CreateTaskModalComponent {
     }
   }
 
+  onBackdropClick(event: Event): void {
+    if (event.target === event.currentTarget) {
+      this.closeModal();
+    }
+  }
+
+  onRecurringChange(): void {
+    if (!this.form.isRecurring) {
+      this.form.recurrenceEndDate = undefined;
+    }
+  }
+
   private resetForm(): void {
     this.form = {
       title: '',
       description: '',
       type: TaskType.Daily,
-      priority: TaskPriority.Medium
+      priority: TaskPriority.Medium,
+      isRecurring: false,
+      recurrenceEndDate: undefined
     };
-  }
-
-  onBackdropClick(event: Event): void {
-    if (event.target === event.currentTarget) {
-      this.closeModal();
-    }
   }
 }

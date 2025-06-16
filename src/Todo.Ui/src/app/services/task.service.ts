@@ -16,6 +16,15 @@ export interface Task {
     updatedAt?: string;
 }
 
+export interface CreateTaskForm {
+    title: string;
+    description: string;
+    type: TaskType;
+    priority: TaskPriority;
+    isRecurring: boolean;
+    recurrenceEndDate?: string;
+}
+
 export enum TaskStatus {
     Pending = 'Pending',
     InProgress = 'InProgress',
@@ -49,6 +58,20 @@ export class TaskService extends ApiService {
 
     createTask(task: Partial<Task>): Observable<Task> {
         return this.http.post<Task>(this.getUrl('/tasks'), task);
+    }
+
+    createRecurringTasks(taskData: CreateTaskForm): Observable<Task[]> {
+        // Preparar os dados para o backend
+        const backendData = {
+            title: taskData.title,
+            description: taskData.description,
+            type: taskData.type,
+            priority: taskData.priority,
+            isRecurring: taskData.isRecurring,
+            recurrenceEndDate: taskData.recurrenceEndDate ? new Date(taskData.recurrenceEndDate).toISOString() : null
+        };
+
+        return this.http.post<Task[]>(this.getUrl('/tasks'), backendData);
     }
 
     updateTask(id: number, task: Partial<Task>): Observable<Task> {

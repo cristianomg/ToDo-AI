@@ -26,23 +26,23 @@ namespace ToDo.Infrastructure.Repositories
             {
                 TaskType.Daily => await query
                     .Where(t => t.Type == TaskType.Daily &&
-                               t.CreatedAt.Date == startOfDay.Date)
+                               t.DueDate.Date == startOfDay.Date)
                     .OrderByDescending(t => t.Priority)
                     .ThenBy(t => t.CreatedAt)
                     .ToListAsync(),
 
                 TaskType.Weekly => await query
                     .Where(t => t.Type == TaskType.Weekly &&
-                               t.CreatedAt.Date >= GetStartOfWeek(startOfDay) &&
-                               t.CreatedAt.Date <= GetEndOfWeek(startOfDay))
+                               t.DueDate.Date >= GetStartOfWeek(startOfDay) &&
+                               t.DueDate.Date <= GetEndOfWeek(startOfDay))
                     .OrderByDescending(t => t.Priority)
                     .ThenBy(t => t.CreatedAt)
                     .ToListAsync(),
 
                 TaskType.Monthly => await query
                     .Where(t => t.Type == TaskType.Monthly &&
-                               t.CreatedAt.Year == startOfDay.Year &&
-                               t.CreatedAt.Month == startOfDay.Month)
+                               t.DueDate.Year == startOfDay.Year &&
+                               t.DueDate.Month == startOfDay.Month)
                     .OrderByDescending(t => t.Priority)
                     .ThenBy(t => t.CreatedAt)
                     .ToListAsync(),
