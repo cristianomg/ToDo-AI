@@ -3,6 +3,11 @@
         <div class="flex justify-between items-center max-w-7xl mx-auto">
             <h1 class="text-2xl font-bold text-foreground">Todo App</h1>
             <div class="flex items-center gap-4">
+                <button (click)="toggleDarkMode()" class="rounded-md p-2 bg-muted hover:bg-muted/70 transition-colors"
+                    [attr.aria-label]="darkMode ? 'Modo claro' : 'Modo escuro'">
+                    <span *ngIf="!darkMode" class="text-xl">🌙</span>
+                    <span *ngIf="darkMode" class="text-xl">☀️</span>
+                </button>
                 <span class="text-muted-foreground">Bem-vindo, {{ currentUser?.name }}!</span>
                 <button (click)="logout()"
                     class="px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 transition-colors">
@@ -74,7 +79,7 @@
 
             <!-- Board: Em Andamento -->
             <div class="bg-card border border-border rounded-lg">
-                <div class="border-b border-border px-4 py-3 bg-orange-50">
+                <div class="border-b border-border px-4 py-3 bg-orange-100 dark:bg-orange-950/30">
                     <div class="flex justify-between items-center">
                         <h3 class="font-semibold text-foreground">Em Andamento</h3>
                         <span class="bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium">{{
@@ -96,7 +101,7 @@
 
             <!-- Board: Concluídas -->
             <div class="bg-card border border-border rounded-lg">
-                <div class="border-b border-border px-4 py-3 bg-green-50">
+                <div class="border-b border-border px-4 py-3 bg-green-100 dark:bg-green-950/30">
                     <div class="flex justify-between items-center">
                         <h3 class="font-semibold text-foreground">Concluídas</h3>
                         <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">{{

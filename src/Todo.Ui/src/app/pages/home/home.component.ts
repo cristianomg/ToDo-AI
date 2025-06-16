@@ -37,6 +37,8 @@ export class HomeComponent implements OnInit {
   TaskType = TaskType;
   TaskPriority = TaskPriority;
 
+  darkMode: boolean = false;
+
   constructor(
     private router: Router,
     private taskService: TaskService,
@@ -49,6 +51,7 @@ export class HomeComponent implements OnInit {
     console.log('Data inicializada:', this.selectedDate);
     this.loadTasks();
     this.loadCurrentUser();
+    this.loadTheme();
   }
 
   // Método para formatar data para o input HTML (YYYY-MM-DD)
@@ -247,5 +250,27 @@ export class HomeComponent implements OnInit {
     this.inProgressTasks = this.inProgressTasks.filter(task => task.id !== taskId);
     this.completedTasks = this.completedTasks.filter(task => task.id !== taskId);
     this.cdr.markForCheck();
+  }
+
+  toggleDarkMode(): void {
+    this.darkMode = !this.darkMode;
+    if (this.darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }
+
+  loadTheme(): void {
+    const theme = localStorage.getItem('theme');
+    if (theme === 'dark') {
+      this.darkMode = true;
+      document.documentElement.classList.add('dark');
+    } else {
+      this.darkMode = false;
+      document.documentElement.classList.remove('dark');
+    }
   }
 }
