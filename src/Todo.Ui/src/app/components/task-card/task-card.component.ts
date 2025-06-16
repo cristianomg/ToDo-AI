@@ -8,7 +8,6 @@ import { Task, TaskPriority, TaskType, TaskService } from '../../services/task.s
   standalone: true,
   imports: [CommonModule, CdkDrag],
   templateUrl: './task-card.component.html',
-  styleUrls: ['./task-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TaskCardComponent {
@@ -28,10 +27,10 @@ export class TaskCardComponent {
 
   getPriorityClass(priority: TaskPriority): string {
     switch (priority) {
-      case TaskPriority.Low: return 'priority-low';
-      case TaskPriority.Medium: return 'priority-medium';
-      case TaskPriority.High: return 'priority-high';
-      default: return '';
+      case TaskPriority.Low: return 'bg-muted text-muted-foreground';
+      case TaskPriority.Medium: return 'bg-orange-500 text-white';
+      case TaskPriority.High: return 'bg-destructive text-destructive-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   }
 
@@ -61,9 +60,9 @@ export class TaskCardComponent {
 
   getDateClass(): string {
     if (this.isOverdue()) {
-      return 'task-date overdue';
+      return 'bg-destructive/10 text-destructive border-l-destructive';
     }
-    return 'task-date';
+    return 'bg-primary/10 text-primary border-l-primary';
   }
 
   deleteTask(): void {

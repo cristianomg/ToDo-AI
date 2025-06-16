@@ -1,97 +1,115 @@
-<div class="home-container">
-    <header class="header">
-        <h1>Todo App</h1>
-        <div class="user-info">
-            <span>Bem-vindo, {{ currentUser?.name }}!</span>
-            <button (click)="logout()" class="btn-logout">Sair</button>
+<div class="min-h-screen bg-background">
+    <header class="border-b border-border bg-card px-6 py-4">
+        <div class="flex justify-between items-center max-w-7xl mx-auto">
+            <h1 class="text-2xl font-bold text-foreground">Todo App</h1>
+            <div class="flex items-center gap-4">
+                <span class="text-muted-foreground">Bem-vindo, {{ currentUser?.name }}!</span>
+                <button (click)="logout()"
+                    class="px-4 py-2 bg-destructive text-destructive-foreground rounded-md hover:bg-destructive/90 transition-colors">
+                    Sair
+                </button>
+            </div>
         </div>
     </header>
 
-    <main class="main-content">
+    <main class="max-w-7xl mx-auto p-6">
         <!-- Filtros -->
-        <div class="filters-section">
-            <h2>Filtros</h2>
-            <div class="filters">
-                <div class="filter-group">
-                    <label for="taskType">Tipo de Tarefa:</label>
-                    <select id="taskType" [(ngModel)]="selectedTaskType" (change)="onTypeChange()" class="form-control">
+        <div class="bg-card border border-border rounded-lg p-6 mb-6">
+            <h2 class="text-lg font-semibold text-foreground mb-4">Filtros</h2>
+            <div class="flex flex-wrap gap-4 items-end">
+                <div class="flex flex-col gap-2">
+                    <label for="taskType" class="text-sm font-medium text-foreground">Tipo de Tarefa:</label>
+                    <select id="taskType" [(ngModel)]="selectedTaskType" (change)="onTypeChange()"
+                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                         <option [value]="TaskType.Daily">Diária</option>
                         <option [value]="TaskType.Weekly">Semanal</option>
                         <option [value]="TaskType.Monthly">Mensal</option>
                     </select>
                 </div>
 
-                <div class="filter-group">
-                    <label for="taskDate">Data:</label>
+                <div class="flex flex-col gap-2">
+                    <label for="taskDate" class="text-sm font-medium text-foreground">Data:</label>
                     <input type="date" id="taskDate" [(ngModel)]="selectedDate" (change)="onDateChange()"
-                        class="form-control">
+                        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
                 </div>
 
-                <button (click)="clearFilters()" class="btn-clear-filters">
+                <button (click)="clearFilters()"
+                    class="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors">
                     Limpar Filtros
                 </button>
             </div>
         </div>
 
         <!-- Botão Criar Tarefa -->
-        <div class="create-task-section">
-            <button (click)="openCreateModal()" class="btn-create-task">
-                <span class="icon">+</span>
+        <div class="mb-6">
+            <button (click)="openCreateModal()"
+                class="inline-flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors">
+                <span class="text-lg font-bold">+</span>
                 Nova Tarefa
             </button>
         </div>
 
         <!-- Boards de Tarefas com Drag and Drop -->
-        <div class="boards-container" cdkDropListGroup>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" cdkDropListGroup>
             <!-- Board: A Fazer -->
-            <div class="board">
-                <div class="board-header pending">
-                    <h3>A Fazer</h3>
-                    <span class="task-count">{{ pendingTasks.length }}</span>
+            <div class="bg-card border border-border rounded-lg">
+                <div class="border-b border-border px-4 py-3 bg-muted/30">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-semibold text-foreground">A Fazer</h3>
+                        <span class="bg-primary text-primary-foreground px-2 py-1 rounded-full text-xs font-medium">{{
+                            pendingTasks.length }}</span>
+                    </div>
                 </div>
-                <div class="board-content" id="pending-container" cdkDropList [cdkDropListData]="pendingTasks"
+                <div class="p-4 min-h-[400px]" id="pending-container" cdkDropList [cdkDropListData]="pendingTasks"
                     [cdkDropListConnectedTo]="['in-progress-container', 'completed-container']"
                     (cdkDropListDropped)="onDrop($event)">
                     <app-task-card *ngFor="let task of pendingTasks; trackBy: trackByTaskId" [task]="task"
                         (taskDeleted)="onTaskDeleted($event)">
                     </app-task-card>
-                    <div *ngIf="pendingTasks.length === 0" class="empty-state">
+                    <div *ngIf="pendingTasks.length === 0" class="text-center py-8 text-muted-foreground">
                         Nenhuma tarefa a fazer
                     </div>
                 </div>
             </div>
 
             <!-- Board: Em Andamento -->
-            <div class="board">
-                <div class="board-header in-progress">
-                    <h3>Em Andamento</h3>
-                    <span class="task-count">{{ inProgressTasks.length }}</span>
+            <div class="bg-card border border-border rounded-lg">
+                <div class="border-b border-border px-4 py-3 bg-orange-50">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-semibold text-foreground">Em Andamento</h3>
+                        <span class="bg-orange-500 text-white px-2 py-1 rounded-full text-xs font-medium">{{
+                            inProgressTasks.length }}</span>
+                    </div>
                 </div>
-                <div class="board-content" id="in-progress-container" cdkDropList [cdkDropListData]="inProgressTasks"
+                <div class="p-4 min-h-[400px]" id="in-progress-container" cdkDropList
+                    [cdkDropListData]="inProgressTasks"
                     [cdkDropListConnectedTo]="['pending-container', 'completed-container']"
                     (cdkDropListDropped)="onDrop($event)">
                     <app-task-card *ngFor="let task of inProgressTasks; trackBy: trackByTaskId" [task]="task"
                         (taskDeleted)="onTaskDeleted($event)">
                     </app-task-card>
-                    <div *ngIf="inProgressTasks.length === 0" class="empty-state">
+                    <div *ngIf="inProgressTasks.length === 0" class="text-center py-8 text-muted-foreground">
                         Nenhuma tarefa em andamento
                     </div>
                 </div>
             </div>
 
             <!-- Board: Concluídas -->
-            <div class="board">
-                <div class="board-header completed">
-                    <h3>Concluídas</h3>
-                    <span class="task-count">{{ completedTasks.length }}</span>
+            <div class="bg-card border border-border rounded-lg">
+                <div class="border-b border-border px-4 py-3 bg-green-50">
+                    <div class="flex justify-between items-center">
+                        <h3 class="font-semibold text-foreground">Concluídas</h3>
+                        <span class="bg-green-500 text-white px-2 py-1 rounded-full text-xs font-medium">{{
+                            completedTasks.length }}</span>
+                    </div>
                 </div>
-                <div class="board-content" id="completed-container" cdkDropList [cdkDropListData]="completedTasks"
+                <div class="p-4 min-h-[400px]" id="completed-container" cdkDropList [cdkDropListData]="completedTasks"
                     [cdkDropListConnectedTo]="['pending-container', 'in-progress-container']"
                     (cdkDropListDropped)="onDrop($event)">
                     <app-task-card *ngFor="let task of completedTasks; trackBy: trackByTaskId" [task]="task"
                         (taskDeleted)="onTaskDeleted($event)">
                     </app-task-card>
-                    <div *ngIf="completedTasks.length === 0" class="empty-state">
+                    <div *ngIf="completedTasks.length === 0" class="text-center py-8 text-muted-foreground">
                         Nenhuma tarefa concluída
                     </div>
                 </div>

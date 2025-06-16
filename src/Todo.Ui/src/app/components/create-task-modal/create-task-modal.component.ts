@@ -14,8 +14,7 @@ export interface CreateTaskForm {
   selector: 'app-create-task-modal',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './create-task-modal.component.html',
-  styleUrl: './create-task-modal.component.scss'
+  templateUrl: './create-task-modal.component.html'
 })
 export class CreateTaskModalComponent {
   @Input() isOpen: boolean = false;
@@ -64,7 +63,6 @@ export class CreateTaskModalComponent {
   }
 
   closeModal(): void {
-    this.isOpen = false;
     this.isOpenChange.emit(false);
     this.resetForm();
   }

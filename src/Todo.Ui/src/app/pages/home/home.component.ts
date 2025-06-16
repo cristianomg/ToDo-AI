@@ -13,7 +13,6 @@ import { CreateTaskModalComponent, CreateTaskForm } from '../../components/creat
   standalone: true,
   imports: [CommonModule, FormsModule, DragDropModule, TaskCardComponent, CreateTaskModalComponent],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HomeComponent implements OnInit {
@@ -216,10 +215,10 @@ export class HomeComponent implements OnInit {
 
   getPriorityClass(priority: TaskPriority): string {
     switch (priority) {
-      case TaskPriority.Low: return 'priority-low';
-      case TaskPriority.Medium: return 'priority-medium';
-      case TaskPriority.High: return 'priority-high';
-      default: return '';
+      case TaskPriority.Low: return 'bg-muted text-muted-foreground';
+      case TaskPriority.Medium: return 'bg-orange-500 text-white';
+      case TaskPriority.High: return 'bg-destructive text-destructive-foreground';
+      default: return 'bg-muted text-muted-foreground';
     }
   }
 
@@ -230,17 +229,23 @@ export class HomeComponent implements OnInit {
   onDateChange(): void {
     this.loadTasks();
   }
+
   clearFilters(): void {
     this.selectedTaskType = TaskType.Daily;
     this.selectedDate = this.formatDateForInput(new Date());
     this.loadTasks();
   }
+
   logout(): void {
     this.authService.clearCurrentUser();
     this.router.navigate(['/login']);
   }
 
   onTaskDeleted(taskId: number): void {
-    this.loadTasks();
+    this.tasks = this.tasks.filter(task => task.id !== taskId);
+    this.pendingTasks = this.pendingTasks.filter(task => task.id !== taskId);
+    this.inProgressTasks = this.inProgressTasks.filter(task => task.id !== taskId);
+    this.completedTasks = this.completedTasks.filter(task => task.id !== taskId);
+    this.cdr.markForCheck();
   }
 }

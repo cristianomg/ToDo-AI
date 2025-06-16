@@ -1,21 +1,30 @@
-<div class="task-card" cdkDrag>
-    <div class="task-header">
-        <h4>{{ task.title }}</h4>
-        <div class="header-actions">
-            <span class="priority-badge" [class]="getPriorityClass(task.priority)">
+<div class="bg-card border border-border rounded-lg p-4 mb-4 transition-all duration-150 ease-in-out cursor-grab relative hover:shadow-md hover:-translate-y-0.5 select-none"
+    cdkDrag>
+    <div class="flex justify-between items-start mb-2">
+        <h4 class="m-0 text-base text-card-foreground font-medium flex-1 mr-2 leading-tight">{{ task.title }}</h4>
+        <div class="flex items-center gap-1">
+            <span class="px-2 py-1 rounded text-xs font-semibold uppercase whitespace-nowrap"
+                [class]="getPriorityClass(task.priority)">
                 {{ getPriorityLabel(task.priority) }}
             </span>
-            <button class="delete-btn" (click)="deleteTask()" title="Excluir tarefa">
+            <button
+                class="bg-transparent border-none cursor-pointer p-1 rounded text-sm opacity-40 hover:opacity-100 hover:bg-destructive/10 transition-all duration-150 flex items-center justify-center min-w-5 min-h-5"
+                (click)="deleteTask()" title="Excluir tarefa">
                 🗑️
             </button>
-
         </div>
     </div>
-    <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
-    <div class="task-meta">
-        <span class="task-type">{{ getTypeLabel(task.type) }}</span>
-        <span [class]="getDateClass()">
+
+    <p *ngIf="task.description" class="my-2 text-muted-foreground text-sm leading-relaxed break-words">{{
+        task.description }}</p>
+
+    <div class="flex justify-between items-center mt-2 text-xs text-muted-foreground flex-wrap gap-2">
+        <span class="bg-muted px-2 py-1 rounded whitespace-nowrap">{{ getTypeLabel(task.type) }}</span>
+        <span class="flex items-center gap-1 font-medium text-foreground bg-muted/50 px-2 py-1 rounded border-l-2"
+            [class]="getDateClass()">
             📅 {{ getDateLabel() }} {{ task.dueDate | date:'dd/MM/yyyy' }}
         </span>
     </div>
+
+
 </div>

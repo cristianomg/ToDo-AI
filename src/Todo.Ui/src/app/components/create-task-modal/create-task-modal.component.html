@@ -1,51 +1,64 @@
-<div class="modal-overlay" *ngIf="isOpen" (click)="onBackdropClick($event)">
-    <div class="modal-content">
-        <div class="modal-header">
-            <h2>Nova Tarefa</h2>
-            <button class="close-button" (click)="closeModal()" type="button">
-                <span>&times;</span>
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50" *ngIf="isOpen"
+    (click)="onBackdropClick($event)">
+    <div class="bg-card border border-border rounded-lg shadow-lg w-full max-w-md mx-4">
+        <div class="flex justify-between items-center p-6 border-b border-border">
+            <h2 class="text-lg font-semibold text-foreground">Nova Tarefa</h2>
+            <button class="text-muted-foreground hover:text-foreground transition-colors" (click)="closeModal()"
+                type="button">
+                <span class="text-xl">&times;</span>
             </button>
         </div>
 
-        <div class="modal-body">
+        <div class="p-6">
             <form (ngSubmit)="createTask()" #taskForm="ngForm">
-                <div class="form-group">
-                    <label for="title">Título *</label>
-                    <input type="text" id="title" name="title" [(ngModel)]="form.title" required class="form-control"
-                        placeholder="Digite o título da tarefa" maxlength="100">
-                </div>
-
-                <div class="form-group">
-                    <label for="description">Descrição</label>
-                    <textarea id="description" name="description" [(ngModel)]="form.description" class="form-control"
-                        placeholder="Digite a descrição da tarefa (opcional)" rows="3" maxlength="500"></textarea>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="type">Tipo</label>
-                        <select id="type" name="type" [(ngModel)]="form.type" class="form-control">
-                            <option [value]="TaskType.Daily">{{ getTypeLabel(TaskType.Daily) }}</option>
-                            <option [value]="TaskType.Weekly">{{ getTypeLabel(TaskType.Weekly) }}</option>
-                            <option [value]="TaskType.Monthly">{{ getTypeLabel(TaskType.Monthly) }}</option>
-                        </select>
+                <div class="space-y-4">
+                    <div class="space-y-2">
+                        <label for="title" class="text-sm font-medium text-foreground">Título *</label>
+                        <input type="text" id="title" name="title" [(ngModel)]="form.title" required
+                            class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Digite o título da tarefa" maxlength="100">
                     </div>
 
-                    <div class="form-group">
-                        <label for="priority">Prioridade</label>
-                        <select id="priority" name="priority" [(ngModel)]="form.priority" class="form-control">
-                            <option [value]="TaskPriority.Low">{{ getPriorityLabel(TaskPriority.Low) }}</option>
-                            <option [value]="TaskPriority.Medium">{{ getPriorityLabel(TaskPriority.Medium) }}</option>
-                            <option [value]="TaskPriority.High">{{ getPriorityLabel(TaskPriority.High) }}</option>
-                        </select>
+                    <div class="space-y-2">
+                        <label for="description" class="text-sm font-medium text-foreground">Descrição</label>
+                        <textarea id="description" name="description" [(ngModel)]="form.description"
+                            class="flex min-h-[80px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            placeholder="Digite a descrição da tarefa (opcional)" rows="3" maxlength="500"></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-2">
+                            <label for="type" class="text-sm font-medium text-foreground">Tipo</label>
+                            <select id="type" name="type" [(ngModel)]="form.type"
+                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                <option [value]="TaskType.Daily">{{ getTypeLabel(TaskType.Daily) }}</option>
+                                <option [value]="TaskType.Weekly">{{ getTypeLabel(TaskType.Weekly) }}</option>
+                                <option [value]="TaskType.Monthly">{{ getTypeLabel(TaskType.Monthly) }}</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label for="priority" class="text-sm font-medium text-foreground">Prioridade</label>
+                            <select id="priority" name="priority" [(ngModel)]="form.priority"
+                                class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50">
+                                <option [value]="TaskPriority.Low">{{ getPriorityLabel(TaskPriority.Low) }}</option>
+                                <option [value]="TaskPriority.Medium">{{ getPriorityLabel(TaskPriority.Medium) }}
+                                </option>
+                                <option [value]="TaskPriority.High">{{ getPriorityLabel(TaskPriority.High) }}</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" (click)="closeModal()">
+                <div class="flex justify-end gap-3 mt-6 pt-6 border-t border-border">
+                    <button type="button"
+                        class="px-4 py-2 bg-secondary text-secondary-foreground rounded-md hover:bg-secondary/80 transition-colors"
+                        (click)="closeModal()">
                         Cancelar
                     </button>
-                    <button type="submit" class="btn btn-primary" [disabled]="!form.title.trim()">
+                    <button type="submit"
+                        class="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                        [disabled]="!form.title.trim()">
                         Criar Tarefa
                     </button>
                 </div>
