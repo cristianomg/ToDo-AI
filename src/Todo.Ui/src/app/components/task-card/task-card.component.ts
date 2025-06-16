@@ -43,4 +43,24 @@ export class TaskCardComponent {
       default: return 'Desconhecido';
     }
   }
+
+  isOverdue(): boolean {
+    const today = new Date();
+    const dueDate = new Date(this.task.dueDate);
+    return dueDate < today && this.task.status !== 'Completed';
+  }
+
+  getDateLabel(): string {
+    if (this.isOverdue()) {
+      return 'Vencida em:';
+    }
+    return 'Vence em:';
+  }
+
+  getDateClass(): string {
+    if (this.isOverdue()) {
+      return 'task-date overdue';
+    }
+    return 'task-date';
+  }
 } 

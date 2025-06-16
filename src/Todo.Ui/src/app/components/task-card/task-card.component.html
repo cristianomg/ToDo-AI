@@ -8,7 +8,9 @@
     <p *ngIf="task.description" class="task-description">{{ task.description }}</p>
     <div class="task-meta">
         <span class="task-type">{{ getTypeLabel(task.type) }}</span>
-        <span class="task-date">{{ task.dueDate | date:'dd/MM/yyyy' }}</span>
+        <span [class]="getDateClass()">
+            📅 {{ getDateLabel() }} {{ task.dueDate | date:'dd/MM/yyyy' }}
+        </span>
     </div>
     <div class="drag-handle" cdkDragHandle>
         <span class="drag-icon">⋮⋮</span>
