@@ -1,27 +1,50 @@
-# TodoUi
+## 🗺️ Roadmap - Todo List Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.5.
+Este projeto tem como objetivo criar um sistema de **gerenciamento de tarefas** (Todo List) com foco em produtividade, organização e usabilidade. As tarefas podem ser diárias, semanais ou mensais. Abaixo está o roadmap de desenvolvimento dividido em fases:
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+### ✅ Fase 1: MVP - Funcionalidades Básicas
+- [x] login de usuários
+- [x] CRUD de tarefas (criar, editar, concluir, excluir)
+- [x] Campos da tarefa: título, descrição, tipo (diária/semanal/mensal), data de vencimento, prioridade
+- [x] Visualização das tarefas por período (diário, semanal, mensal)
+- [x] Filtros por tipo e data
+- [x] Alteração de status da tarefas (arrastar e soltar)
+---
 
-## Code scaffolding
+### 🧪 Fase 2: Organização e Automação
+- [ ] Tarefas recorrentes (diária, semanal, mensal)
+- [ ] Lembretes e notificações
+- [ ] Subtarefas (checklists)
+- [ ] Barra de progresso por dia, semana e mês
+- [ ] Histórico de tarefas concluídas
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### 👥 Fase 3: Colaboração
+- [ ] Compartilhamento de tarefas com outros usuários
+- [ ] Comentários nas tarefas
+- [ ] Listas compartilhadas entre usuários (família, time, casal)
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### 🤖 Fase 4: Inteligência e Personalização
+- [ ] Sugestões automáticas com base no uso
+- [ ] Estatísticas de produtividade
+- [ ] Temas personalizados (modo claro/escuro, cores)
+- [ ] Integração com Google Calendar / Outlook
+---
 
-## Running unit tests
+### 🧪 Testes e Qualidade
+- [x] Documentação da API com Swagger
+- [x] Tratamento global de exceções
+- [] Testes unitários com xUnit e Moq
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+---
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### 🛠️ Tecnologias Utilizadas
+- ASP.NET Core (.NET 8)
+- Angular
+- PostgreSQL
+- Entity Framework Core
+- MediatR (arquitetura CQRS)
