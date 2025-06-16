@@ -1,0 +1,103 @@
+<div class="home-container">
+    <header class="header">
+        <h1>Todo App</h1>
+        <div class="user-info">
+            <span>Bem-vindo, {{ currentUser?.name }}!</span>
+            <button (click)="logout()" class="btn-logout">Sair</button>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <!-- Filtros -->
+        <div class="filters-section">
+            <h2>Filtros</h2>
+            <div class="filters">
+                <div class="filter-group">
+                    <label for="taskType">Tipo de Tarefa:</label>
+                    <select id="taskType" [(ngModel)]="selectedTaskType" (change)="onTypeChange()" class="form-control">
+                        <option [value]="TaskType.Daily">Diária</option>
+                        <option [value]="TaskType.Weekly">Semanal</option>
+                        <option [value]="TaskType.Monthly">Mensal</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label for="taskDate">Data:</label>
+                    <input type="date" id="taskDate" [(ngModel)]="selectedDate" (change)="onDateChange()"
+                        class="form-control">
+                </div>
+
+                <button (click)="clearFilters()" class="btn-clear-filters">
+                    Limpar Filtros
+                </button>
+            </div>
+        </div>
+
+        <!-- Botão Criar Tarefa -->
+        <div class="create-task-section">
+            <button (click)="openCreateModal()" class="btn-create-task">
+                <span class="icon">+</span>
+                Nova Tarefa
+            </button>
+        </div>
+
+        <!-- Boards de Tarefas com Drag and Drop -->
+        <div class="boards-container" cdkDropListGroup>
+            <!-- Board: A Fazer -->
+            <div class="board">
+                <div class="board-header pending">
+                    <h3>A Fazer</h3>
+                    <span class="task-count">{{ pendingTasks.length }}</span>
+                </div>
+                <div class="board-content" id="pending-container" cdkDropList [cdkDropListData]="pendingTasks"
+                    [cdkDropListConnectedTo]="['in-progress-container', 'completed-container']"
+                    (cdkDropListDropped)="onDrop($event)">
+                    <app-task-card *ngFor="let task of pendingTasks; trackBy: trackByTaskId" [task]="task">
+                    </app-task-card>
+                    <div *ngIf="pendingTasks.length === 0" class="empty-state">
+                        Nenhuma tarefa a fazer
+                    </div>
+                </div>
+            </div>
+
+            <!-- Board: Em Andamento -->
+            <div class="board">
+                <div class="board-header in-progress">
+                    <h3>Em Andamento</h3>
+                    <span class="task-count">{{ inProgressTasks.length }}</span>
+                </div>
+                <div class="board-content" id="in-progress-container" cdkDropList [cdkDropListData]="inProgressTasks"
+                    [cdkDropListConnectedTo]="['pending-container', 'completed-container']"
+                    (cdkDropListDropped)="onDrop($event)">
+                    <app-task-card *ngFor="let task of inProgressTasks; trackBy: trackByTaskId" [task]="task">
+                    </app-task-card>
+                    <div *ngIf="inProgressTasks.length === 0" class="empty-state">
+                        Nenhuma tarefa em andamento
+                    </div>
+                </div>
+            </div>
+
+            <!-- Board: Concluídas -->
+            <div class="board">
+                <div class="board-header completed">
+                    <h3>Concluídas</h3>
+                    <span class="task-count">{{ completedTasks.length }}</span>
+                </div>
+                <div class="board-content" id="completed-container" cdkDropList [cdkDropListData]="completedTasks"
+                    [cdkDropListConnectedTo]="['pending-container', 'in-progress-container']"
+                    (cdkDropListDropped)="onDrop($event)">
+                    <app-task-card *ngFor="let task of completedTasks; trackBy: trackByTaskId" [task]="task">
+                    </app-task-card>
+                    <div *ngIf="completedTasks.length === 0" class="empty-state">
+                        Nenhuma tarefa concluída
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal de Criar Tarefa -->
+    <app-create-task-modal [isOpen]="isCreateModalOpen" (isOpenChange)="closeCreateModal()"
+        (taskCreated)="onCreateTask($event)">
+    </app-create-task-modal>
+</div>

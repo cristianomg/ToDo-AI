@@ -1,0 +1,21 @@
+<div class="login-container">
+    <div class="login-card">
+        <h2>Login</h2>
+
+        <form (ngSubmit)="login()" class="login-form">
+            <div class="form-group">
+                <label for="userSelect">Selecione o usuário:</label>
+                <select id="userSelect" [(ngModel)]="selectedUserId" name="userSelect" class="form-control" required>
+                    <option value="">-- Selecione um usuário --</option>
+                    <option *ngFor="let user of users" [value]="user.id">
+                        {{ user.name }}
+                    </option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn-login" [disabled]="!selectedUserId">
+                Entrar
+            </button>
+        </form>
+    </div>
+</div>
