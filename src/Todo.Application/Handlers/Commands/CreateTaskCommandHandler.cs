@@ -2,15 +2,16 @@ using MediatR;
 using Todo.Application.Commands;
 using ToDo.Domain.Entities;
 using ToDo.Domain.Enums;
+using ToDo.Domain.Repositories;
 using ToDo.Infrastructure.Repositories;
 
 namespace Todo.Application.Handlers.Commands
 {
     public class CreateTaskCommandHandler : IRequestHandler<CreateTaskCommand, List<Tasks>>
     {
-        private readonly BaseRepository<Tasks> _taskRepository;
+        private readonly ITaskRepository _taskRepository;
 
-        public CreateTaskCommandHandler(BaseRepository<Tasks> taskRepository)
+        public CreateTaskCommandHandler(ITaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
         }
