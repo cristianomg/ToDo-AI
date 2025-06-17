@@ -3,6 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
 
+export interface ChecklistItem {
+    id: number;
+    text: string;
+    completed: boolean;
+}
+
 export interface Task {
     id: number;
     title: string;
@@ -14,6 +20,7 @@ export interface Task {
     userId: number;
     createdAt: string;
     updatedAt?: string;
+    checklist?: ChecklistItem[];
 }
 
 export interface CreateTaskForm {
@@ -84,5 +91,22 @@ export class TaskService extends ApiService {
 
     deleteTask(id: number): Observable<void> {
         return this.http.delete<void>(this.getUrl(`/tasks/${id}`));
+    }
+
+    // Checklist methods
+    addChecklistItem(taskId: number, text: string): Observable<ChecklistItem> {
+        return this.http.post<ChecklistItem>(this.getUrl(`/tasks/${taskId}/checklist`), { text });
+    }
+
+    toggleChecklistItem(taskId: number, itemId: number): Observable<ChecklistItem> {
+        return this.http.put<ChecklistItem>(this.getUrl(`/tasks/${taskId}/checklist/${itemId}/toggle`), {});
+    }
+
+    deleteChecklistItem(taskId: number, itemId: number): Observable<void> {
+        return this.http.delete<void>(this.getUrl(`/tasks/${taskId}/checklist/${itemId}`));
+    }
+
+    getTaskById(id: number): Observable<Task> {
+        return this.http.get<Task>(this.getUrl(`/tasks/${id}`));
     }
 } 

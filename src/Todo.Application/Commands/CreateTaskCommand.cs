@@ -2,6 +2,7 @@ using MediatR;
 using System.Text.Json.Serialization;
 using ToDo.Domain.Entities;
 using ToDo.Domain.Enums;
+using ToDo.Domain.DTOs;
 
 namespace Todo.Application.Commands
 {
@@ -16,5 +17,6 @@ namespace Todo.Application.Commands
         public DateTime? RecurrenceEndDate { get; set; }
         [JsonIgnore]
         public int UserId { get; set; }
+        public List<ChecklistItemDto>? Checklist { get; set; }
     }
 } 

@@ -1,18 +1,103 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Task, TaskPriority, TaskType } from '../../services/task.service';
+import { FormsModule } from '@angular/forms';
+import { Task, TaskPriority, TaskType, ChecklistItem, TaskService } from '../../services/task.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-task-sidebar',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule, FormsModule],
     templateUrl: './task-sidebar.component.html',
     styleUrls: ['./task-sidebar.component.scss']
 })
-export class TaskSidebarComponent {
+export class TaskSidebarComponent implements OnChanges {
     @Input() task: Task | null = null;
     @Input() isOpen: boolean = false;
     @Output() close = new EventEmitter<void>();
+
+    loadedTask: Task | null = null;
+    loading = false;
+    newChecklistText: string = '';
+
+    constructor(private taskService: TaskService,
+        private cdr: ChangeDetectorRef
+    ) { }
+
+    ngOnChanges(changes: SimpleChanges): void {
+        if (changes['isOpen'] && this.isOpen && this.task) {
+            this.loadTaskDetails();
+        }
+        if (changes['isOpen'] && !this.isOpen) {
+            this.loadedTask = null;
+            this.loading = false;
+            this.cdr.markForCheck();
+        }
+    }
+
+    get checklist(): ChecklistItem[] {
+        return this.loadedTask?.checklist || [];
+    }
+
+    private loadTaskDetails(): void {
+        if (!this.task) return;
+        this.loading = true;
+        this.cdr.markForCheck();
+        this.taskService.getTaskById(this.task.id).subscribe({
+            next: (task: Task) => {
+                this.loadedTask = task;
+                this.loading = false;
+                this.cdr.markForCheck();
+            },
+            error: (error: any) => {
+                this.loading = false;
+                this.cdr.markForCheck();
+                console.error('Erro ao carregar detalhes da tarefa:', error);
+            }
+        });
+    }
+
+    private reloadTask(): void {
+        this.loadTaskDetails();
+    }
+
+    addChecklistItem(event: KeyboardEvent): void {
+        if (event.key === 'Enter' && this.newChecklistText.trim() && this.loadedTask) {
+            this.taskService.addChecklistItem(this.loadedTask.id, this.newChecklistText.trim()).subscribe({
+                next: () => {
+                    this.reloadTask();
+                    this.newChecklistText = '';
+                },
+                error: (error) => {
+                    console.error('Erro ao adicionar item do checklist:', error);
+                }
+            });
+        }
+    }
+
+    toggleChecklistItem(item: ChecklistItem): void {
+        if (!this.loadedTask || !this.loadedTask.checklist) return;
+        this.taskService.toggleChecklistItem(this.loadedTask.id, item.id).subscribe({
+            next: () => {
+                this.reloadTask();
+            },
+            error: (error) => {
+                console.error('Erro ao alternar item do checklist:', error);
+            }
+        });
+    }
+
+    deleteChecklistItem(item: ChecklistItem): void {
+        if (!this.loadedTask || !this.loadedTask.checklist) return;
+        this.taskService.deleteChecklistItem(this.loadedTask.id, item.id).subscribe({
+            next: () => {
+                this.reloadTask();
+            },
+            error: (error) => {
+                console.error('Erro ao deletar item do checklist:', error);
+            }
+        });
+    }
 
     getPriorityLabel(priority: TaskPriority): string {
         switch (priority) {

@@ -18,91 +18,126 @@
 
     <!-- Conteúdo da Sidebar -->
     <div class="p-6 space-y-6 overflow-y-auto h-full">
-        <div *ngIf="task; else noTask">
-            <!-- Título -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">Título</label>
-                <h3 class="text-lg font-semibold text-foreground">{{ task.title }}</h3>
-            </div>
+        <ng-container *ngIf="!loading; else loadingDetails">
+            <div *ngIf="loadedTask; else noTask">
+                <!-- ID da Tarefa -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">ID da Tarefa</label>
+                    <p class="text-sm font-semibold text-foreground">{{ loadedTask.id }}</p>
+                </div>
+                <!-- Título -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Título</label>
+                    <h3 class="text-lg font-semibold text-foreground">{{ loadedTask.title }}</h3>
+                </div>
 
-            <!-- Descrição -->
-            <div class="space-y-2" *ngIf="task.description">
-                <label class="text-sm font-medium text-muted-foreground">Descrição</label>
-                <p class="text-foreground bg-muted/50 p-3 rounded-md">{{ task.description }}</p>
-            </div>
+                <!-- Descrição -->
+                <div class="space-y-2" *ngIf="loadedTask.description">
+                    <label class="text-sm font-medium text-muted-foreground">Descrição</label>
+                    <p class="text-foreground bg-muted/50 p-3 rounded-md">{{ loadedTask.description }}</p>
+                </div>
 
-            <!-- Status -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">Status</label>
-                <div>
-                    <span class="px-3 py-1 rounded-full text-sm font-medium" [class]="getStatusClass(task.status)">
-                        {{ getStatusLabel(task.status) }}
-                    </span>
+                <!-- Status -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Status</label>
+                    <div>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium"
+                            [class]="getStatusClass(loadedTask.status)">
+                            {{ getStatusLabel(loadedTask.status) }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Prioridade -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Prioridade</label>
+                    <div>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium"
+                            [class]="getPriorityClass(loadedTask.priority)">
+                            {{ getPriorityLabel(loadedTask.priority) }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Tipo -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Tipo</label>
+                    <div>
+                        <span class="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
+                            {{ getTypeLabel(loadedTask.type) }}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Data de Criação -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Data de Criação</label>
+                    <p class="text-foreground">{{ formatDate(loadedTask.createdAt) }}</p>
+                </div>
+
+                <!-- Data de Vencimento -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Data de Vencimento</label>
+                    <div class="flex items-center gap-2">
+                        <p class="text-foreground" [class.text-destructive]="isOverdue()">
+                            {{ formatDate(loadedTask.dueDate) }}
+                        </p>
+                        <span *ngIf="isOverdue()" class="text-xs text-destructive font-medium">
+                            (Vencida)
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Data de Atualização -->
+                <div class="space-y-2" *ngIf="loadedTask.updatedAt">
+                    <label class="text-sm font-medium text-muted-foreground">Última Atualização</label>
+                    <p class="text-foreground">{{ formatDate(loadedTask.updatedAt) }}</p>
+                </div>
+
+                <!-- Checklist -->
+                <div class="space-y-2">
+                    <label class="text-sm font-medium text-muted-foreground">Checklist</label>
+                    <div *ngIf="loadedTask">
+                        <div *ngFor="let item of checklist" class="flex items-center gap-2 mb-1">
+                            <input type="checkbox" [checked]="item.completed" (change)="toggleChecklistItem(item)"
+                                class="accent-primary w-4 h-4 rounded" />
+                            <span [class.line-through]="item.completed" class="text-foreground flex-1">{{ item.text
+                                }}</span>
+                            <button (click)="deleteChecklistItem(item)"
+                                class="text-destructive hover:text-destructive/80 p-1 rounded transition-colors"
+                                title="Deletar item">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                        <input type="text" [(ngModel)]="newChecklistText" (keydown)="addChecklistItem($event)"
+                            placeholder="Adicionar item..."
+                            class="w-full mt-2 px-3 py-2 border border-border rounded bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm" />
+                    </div>
                 </div>
             </div>
-
-            <!-- Prioridade -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">Prioridade</label>
-                <div>
-                    <span class="px-3 py-1 rounded-full text-sm font-medium" [class]="getPriorityClass(task.priority)">
-                        {{ getPriorityLabel(task.priority) }}
-                    </span>
+            <ng-template #noTask>
+                <div class="text-center py-8">
+                    <svg class="w-16 h-16 mx-auto text-muted-foreground mb-4" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                        </path>
+                    </svg>
+                    <p class="text-muted-foreground">Selecione uma tarefa para ver os detalhes</p>
                 </div>
-            </div>
-
-            <!-- Tipo -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">Tipo</label>
-                <div>
-                    <span class="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
-                        {{ getTypeLabel(task.type) }}
-                    </span>
-                </div>
-            </div>
-
-            <!-- Data de Criação -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">Data de Criação</label>
-                <p class="text-foreground">{{ formatDate(task.createdAt) }}</p>
-            </div>
-
-            <!-- Data de Vencimento -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">Data de Vencimento</label>
-                <div class="flex items-center gap-2">
-                    <p class="text-foreground" [class.text-destructive]="isOverdue()">
-                        {{ formatDate(task.dueDate) }}
-                    </p>
-                    <span *ngIf="isOverdue()" class="text-xs text-destructive font-medium">
-                        (Vencida)
-                    </span>
-                </div>
-            </div>
-
-            <!-- Data de Atualização -->
-            <div class="space-y-2" *ngIf="task.updatedAt">
-                <label class="text-sm font-medium text-muted-foreground">Última Atualização</label>
-                <p class="text-foreground">{{ formatDate(task.updatedAt) }}</p>
-            </div>
-
-            <!-- ID da Tarefa -->
-            <div class="space-y-2">
-                <label class="text-sm font-medium text-muted-foreground">ID da Tarefa</label>
-                <p class="text-foreground font-mono text-sm bg-muted/50 p-2 rounded">{{ task.id }}</p>
-            </div>
-        </div>
-
-        <!-- Template para quando não há tarefa selecionada -->
-        <ng-template #noTask>
-            <div class="text-center py-8">
-                <svg class="w-16 h-16 mx-auto text-muted-foreground mb-4" fill="none" stroke="currentColor"
-                    viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
-                    </path>
+            </ng-template>
+        </ng-container>
+        <ng-template #loadingDetails>
+            <div class="flex flex-col items-center justify-center py-16">
+                <svg class="animate-spin h-8 w-8 text-muted-foreground mb-4" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
                 </svg>
-                <p class="text-muted-foreground">Selecione uma tarefa para ver os detalhes</p>
+                <p class="text-muted-foreground">Carregando detalhes...</p>
             </div>
         </ng-template>
     </div>

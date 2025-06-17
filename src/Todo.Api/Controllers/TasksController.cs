@@ -61,4 +61,40 @@ public class TasksController : ControllerBase
         await _mediator.Send(command);
         return Ok();
     }
+
+    // Checklist endpoints
+    [HttpPost("{id}/checklist")]
+    public async Task<IActionResult> AddChecklistItem(int id, [FromBody] AddChecklistItemCommand command, [FromHeader(Name = "X-User-Id")] int userId)
+    {
+        command.TaskId = id;
+        command.UserId = userId;
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpPut("{taskId}/checklist/{itemId}/toggle")]
+    public async Task<IActionResult> ToggleChecklistItem(int taskId, int itemId, [FromHeader(Name = "X-User-Id")] int userId)
+    {
+        var command = new ToggleChecklistItemCommand
+        {
+            TaskId = taskId,
+            ItemId = itemId,
+            UserId = userId
+        };
+        var result = await _mediator.Send(command);
+        return Ok(result);
+    }
+
+    [HttpDelete("{taskId}/checklist/{itemId}")]
+    public async Task<IActionResult> DeleteChecklistItem(int taskId, int itemId, [FromHeader(Name = "X-User-Id")] int userId)
+    {
+        var command = new DeleteChecklistItemCommand
+        {
+            TaskId = taskId,
+            ItemId = itemId,
+            UserId = userId
+        };
+        await _mediator.Send(command);
+        return Ok();
+    }
 } 

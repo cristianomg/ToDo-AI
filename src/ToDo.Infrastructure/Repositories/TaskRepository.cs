@@ -13,14 +13,15 @@ namespace ToDo.Infrastructure.Repositories
 
         public async Task<Tasks?> GetByIdWithDetailsAsync(int id)
         {
-            return await GetByIdAsync(id, t => t.User);
+            return await GetByIdAsync(id, t => t.User, t => t.Checklist);
         }
         public async Task<IEnumerable<Tasks>> GetByTypeAndDateAndUserAsync(TaskType type, DateTime date, int userId)
         {
             var startOfDay = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
             var endOfDay = startOfDay.AddDays(1).AddTicks(-1);
 
-            var query = GetQueryable().Where(t => t.UserId == userId);
+            var query = GetQueryable()
+                .Where(t => t.UserId == userId);
 
             var tasks = type switch
             {

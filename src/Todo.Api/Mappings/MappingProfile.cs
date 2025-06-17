@@ -10,5 +10,6 @@ public class MappingProfile : Profile
     {
         CreateMap<User, UserDto>();
         CreateMap<Tasks, TaskDto>();
+        CreateMap<ChecklistItem, ChecklistItemDto>();
     }
 } 

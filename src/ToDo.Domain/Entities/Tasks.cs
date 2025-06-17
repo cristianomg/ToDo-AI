@@ -24,6 +24,8 @@ namespace ToDo.Domain.Entities
         public int UserId { get; private set; }
         public User User { get; private set; }
 
+        public ICollection<ChecklistItem> Checklist { get; set; } = new List<ChecklistItem>();
+
         public void UpdateTitle(string title)
         {
             if (string.IsNullOrWhiteSpace(title))

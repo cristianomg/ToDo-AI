@@ -43,6 +43,11 @@ namespace ToDo.Infrastructure.Mapping
 
             builder.Property(x => x.UpdatedAt)
                 .HasColumnType("timestamp with time zone");
+
+            builder.HasMany(x => x.Checklist)
+                .WithOne(x => x.Task)
+                .HasForeignKey(x => x.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 } 
