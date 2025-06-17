@@ -1,0 +1,48 @@
+services:
+  postgres:
+    image: postgres:14-alpine
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=todo_password
+      - POSTGRES_USER=todo_db_dev
+      - POSTGRES_DB=todo_db
+    networks:
+      - localnet
+  api:
+    environment:
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=todo_db;Username=todo_db_dev;Password=todo_password;Pooling=true;
+    image: todo-api
+    container_name: api
+    ports:
+      - 8080:8080
+    build: ./src
+    networks:
+      - localnet
+    depends_on:
+      postgres:
+        condition: service_healthy
+  ui:
+    image: todo-ui
+    container_name: ui
+    ports:
+      - 5000:5000
+    build: ./src/Todo.Ui
+    networks:
+      - localnet
+    depends_on:
+      postgres:
+        condition: service_healthy
+networks:
+  localnet:
+    driver: bridge
+
+volumes:
+  pgdata:
