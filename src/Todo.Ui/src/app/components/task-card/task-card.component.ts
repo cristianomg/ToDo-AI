@@ -13,8 +13,17 @@ import { Task, TaskPriority, TaskType, TaskService } from '../../services/task.s
 export class TaskCardComponent {
   @Input() task!: Task;
   @Output() taskDeleted = new EventEmitter<number>();
+  @Output() taskClicked = new EventEmitter<Task>();
 
   constructor(private taskService: TaskService) { }
+
+  onCardClick(event: Event): void {
+    // Evita abrir a sidebar quando clicar no botão de deletar
+    if ((event.target as HTMLElement).closest('button')) {
+      return;
+    }
+    this.taskClicked.emit(this.task);
+  }
 
   getPriorityLabel(priority: TaskPriority): string {
     switch (priority) {

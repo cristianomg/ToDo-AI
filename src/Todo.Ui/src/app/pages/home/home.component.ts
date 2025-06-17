@@ -8,11 +8,12 @@ import { AuthService, User } from '../../services/auth.service';
 import { TaskCardComponent } from '../../components/task-card/task-card.component';
 import { CreateTaskModalComponent } from '../../components/create-task-modal/create-task-modal.component';
 import { CustomDatepickerComponent } from '../../components/custom-datepicker/custom-datepicker.component';
+import { TaskSidebarComponent } from '../../components/task-sidebar/task-sidebar.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, DragDropModule, TaskCardComponent, CreateTaskModalComponent, CustomDatepickerComponent],
+  imports: [CommonModule, FormsModule, DragDropModule, TaskCardComponent, CreateTaskModalComponent, CustomDatepickerComponent, TaskSidebarComponent],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -27,6 +28,10 @@ export class HomeComponent implements OnInit {
 
   // Modal
   isCreateModalOpen: boolean = false;
+
+  // Sidebar
+  isSidebarOpen: boolean = false;
+  selectedTask: Task | null = null;
 
   // Arrays para drag and drop
   pendingTasks: Task[] = [];
@@ -52,6 +57,19 @@ export class HomeComponent implements OnInit {
     this.loadTasks();
     this.loadCurrentUser();
     this.loadTheme();
+  }
+
+  // Métodos da Sidebar
+  openTaskSidebar(task: Task): void {
+    this.selectedTask = task;
+    this.isSidebarOpen = true;
+    this.cdr.markForCheck();
+  }
+
+  closeTaskSidebar(): void {
+    this.isSidebarOpen = false;
+    this.selectedTask = null;
+    this.cdr.markForCheck();
   }
 
   toggleDarkMode(): void {

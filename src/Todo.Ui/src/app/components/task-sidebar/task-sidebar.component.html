@@ -1,0 +1,109 @@
+<!-- Overlay para fechar a sidebar -->
+<div *ngIf="isOpen" class="fixed inset-0 bg-black/50 z-40 transition-opacity duration-300" (click)="closeSidebar()">
+</div>
+
+<!-- Sidebar -->
+<div class="fixed right-0 top-0 h-full w-96 bg-card border-l border-border shadow-xl z-50 transform transition-transform duration-300 ease-in-out"
+    [class.translate-x-full]="!isOpen" [class.translate-x-0]="isOpen">
+
+    <!-- Header da Sidebar -->
+    <div class="flex items-center justify-between p-6 border-b border-border">
+        <h2 class="text-xl font-semibold text-foreground">Detalhes da Tarefa</h2>
+        <button (click)="closeSidebar()" class="p-2 hover:bg-muted rounded-md transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Conteúdo da Sidebar -->
+    <div class="p-6 space-y-6 overflow-y-auto h-full">
+        <div *ngIf="task; else noTask">
+            <!-- Título -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">Título</label>
+                <h3 class="text-lg font-semibold text-foreground">{{ task.title }}</h3>
+            </div>
+
+            <!-- Descrição -->
+            <div class="space-y-2" *ngIf="task.description">
+                <label class="text-sm font-medium text-muted-foreground">Descrição</label>
+                <p class="text-foreground bg-muted/50 p-3 rounded-md">{{ task.description }}</p>
+            </div>
+
+            <!-- Status -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">Status</label>
+                <div>
+                    <span class="px-3 py-1 rounded-full text-sm font-medium" [class]="getStatusClass(task.status)">
+                        {{ getStatusLabel(task.status) }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Prioridade -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">Prioridade</label>
+                <div>
+                    <span class="px-3 py-1 rounded-full text-sm font-medium" [class]="getPriorityClass(task.priority)">
+                        {{ getPriorityLabel(task.priority) }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Tipo -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">Tipo</label>
+                <div>
+                    <span class="px-3 py-1 rounded-full text-sm font-medium bg-muted text-muted-foreground">
+                        {{ getTypeLabel(task.type) }}
+                    </span>
+                </div>
+            </div>
+
+            <!-- Data de Criação -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">Data de Criação</label>
+                <p class="text-foreground">{{ formatDate(task.createdAt) }}</p>
+            </div>
+
+            <!-- Data de Vencimento -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">Data de Vencimento</label>
+                <div class="flex items-center gap-2">
+                    <p class="text-foreground" [class.text-destructive]="isOverdue()">
+                        {{ formatDate(task.dueDate) }}
+                    </p>
+                    <span *ngIf="isOverdue()" class="text-xs text-destructive font-medium">
+                        (Vencida)
+                    </span>
+                </div>
+            </div>
+
+            <!-- Data de Atualização -->
+            <div class="space-y-2" *ngIf="task.updatedAt">
+                <label class="text-sm font-medium text-muted-foreground">Última Atualização</label>
+                <p class="text-foreground">{{ formatDate(task.updatedAt) }}</p>
+            </div>
+
+            <!-- ID da Tarefa -->
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-muted-foreground">ID da Tarefa</label>
+                <p class="text-foreground font-mono text-sm bg-muted/50 p-2 rounded">{{ task.id }}</p>
+            </div>
+        </div>
+
+        <!-- Template para quando não há tarefa selecionada -->
+        <ng-template #noTask>
+            <div class="text-center py-8">
+                <svg class="w-16 h-16 mx-auto text-muted-foreground mb-4" fill="none" stroke="currentColor"
+                    viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2">
+                    </path>
+                </svg>
+                <p class="text-muted-foreground">Selecione uma tarefa para ver os detalhes</p>
+            </div>
+        </ng-template>
+    </div>
+</div>
