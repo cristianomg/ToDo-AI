@@ -19,11 +19,13 @@ namespace Todo.Application.Handlers.Commands
         public async Task<List<Tasks>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             var tasks = new List<Tasks>();
-
+            var startDate = request.StartAt ?? DateTime.UtcNow;
+            
             if (!request.IsRecurring || !request.RecurrenceEndDate.HasValue)
             {
                 // Criar apenas uma tarefa
-                var dueDate = CalculateDueDate(request.Type);
+                var dueDate = CalculateDueDate(request.Type, startDate);
+                
                 var task = new Tasks(
                     request.Title,
                     request.Description,
@@ -39,7 +41,7 @@ namespace Todo.Application.Handlers.Commands
             else
             {
                 // Criar múltiplas tarefas recorrentes
-                var recurringTasks = GenerateRecurringTasks(request);
+                var recurringTasks = GenerateRecurringTasks(request, startDate);
                 
                 foreach (var task in recurringTasks)
                 {
@@ -52,13 +54,11 @@ namespace Todo.Application.Handlers.Commands
             return tasks;
         }
 
-        private List<Tasks> GenerateRecurringTasks(CreateTaskCommand request)
+        private List<Tasks> GenerateRecurringTasks(CreateTaskCommand request, DateTime startDate)
         {
             var tasks = new List<Tasks>();
-            var startDate = DateTime.UtcNow.Date;
+            var currentDate = startDate.Date;
             var endDate = request.RecurrenceEndDate.Value.Date;
-            
-            var currentDate = startDate;
 
             switch (request.Type)
             {
@@ -123,17 +123,15 @@ namespace Todo.Application.Handlers.Commands
             return tasks;
         }
 
-        private DateTime CalculateDueDate(TaskType type)
+        private DateTime CalculateDueDate(TaskType type, DateTime startDate)
         {
-            var now = DateTime.UtcNow;
-
             return DateTime.SpecifyKind(type switch
             {
-                TaskType.Daily => new DateTime(now.Year, now.Month, now.Day, 23, 59, 59),
+                TaskType.Daily => new DateTime(startDate.Year, startDate.Month, startDate.Day, 23, 59, 59),
                 
-                TaskType.Weekly => GetEndOfWeek(now),
+                TaskType.Weekly => GetEndOfWeek(startDate),
                 
-                TaskType.Monthly => new DateTime(now.Year, now.Month, DateTime.DaysInMonth(now.Year, now.Month), 23, 59, 59),
+                TaskType.Monthly => new DateTime(startDate.Year, startDate.Month, DateTime.DaysInMonth(startDate.Year, startDate.Month), 23, 59, 59),
                 
                 _ => throw new ArgumentException("Invalid task type", nameof(type))
             }, DateTimeKind.Utc);

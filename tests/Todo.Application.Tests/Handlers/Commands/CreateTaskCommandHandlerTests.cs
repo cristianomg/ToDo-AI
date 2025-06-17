@@ -53,6 +53,75 @@ namespace Todo.Application.Tests.Handlers.Commands
         }
 
         [Fact]
+        public async Task Handle_ShouldUseCustomStartAt_WhenProvided()
+        {
+            // Arrange
+            var customStartAt = DateTime.UtcNow.AddDays(5); // 5 dias no futuro
+            var command = new CreateTaskCommand
+            {
+                Title = "Tarefa com Data de Início Personalizada",
+                Description = "Descrição",
+                DueDate = DateTime.UtcNow.AddDays(1),
+                StartAt = customStartAt,
+                Priority = TaskPriority.High,
+                Type = TaskType.Weekly,
+                UserId = 1,
+                IsRecurring = false
+            };
+
+            _mockTaskRepository.Setup(r => r.AddAsync(It.IsAny<Tasks>()))
+                .ReturnsAsync((Tasks t) => t);
+            _mockTaskRepository.Setup(r => r.SaveChangesAsync())
+                .ReturnsAsync(1);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            Assert.Single(result);
+            Assert.Equal(command.Title, result[0].Title);
+            // A data de criação deve ser a data atual, não a data de início
+            Assert.True(result[0].CreatedAt >= DateTime.UtcNow.AddMinutes(-1));
+            Assert.True(result[0].CreatedAt <= DateTime.UtcNow.AddMinutes(1));
+            _mockTaskRepository.Verify(r => r.AddAsync(It.IsAny<Tasks>()), Times.Once);
+            _mockTaskRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldUseCurrentDateTime_WhenStartAtNotProvided()
+        {
+            // Arrange
+            var beforeExecution = DateTime.UtcNow;
+            var command = new CreateTaskCommand
+            {
+                Title = "Tarefa sem Data de Início Personalizada",
+                Description = "Descrição",
+                DueDate = DateTime.UtcNow.AddDays(1),
+                StartAt = null, // Não especificado
+                Priority = TaskPriority.Medium,
+                Type = TaskType.Daily,
+                UserId = 1,
+                IsRecurring = false
+            };
+
+            _mockTaskRepository.Setup(r => r.AddAsync(It.IsAny<Tasks>()))
+                .ReturnsAsync((Tasks t) => t);
+            _mockTaskRepository.Setup(r => r.SaveChangesAsync())
+                .ReturnsAsync(1);
+
+            // Act
+            var result = await _handler.Handle(command, CancellationToken.None);
+            var afterExecution = DateTime.UtcNow;
+
+            // Assert
+            Assert.Single(result);
+            Assert.True(result[0].CreatedAt >= beforeExecution);
+            Assert.True(result[0].CreatedAt <= afterExecution);
+            _mockTaskRepository.Verify(r => r.AddAsync(It.IsAny<Tasks>()), Times.Once);
+            _mockTaskRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
+        }
+
+        [Fact]
         public async Task Handle_ShouldCreateDailyRecurringTasks()
         {
             // Arrange

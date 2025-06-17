@@ -15,6 +15,18 @@ namespace ToDo.Domain.Entities
             UserId = userId;
         }
 
+        public Tasks(string title, string? description, DateTime dueDate, TaskPriority priority, TaskType type, int userId, DateTime createdAt)
+        {
+            Title = title;
+            Description = description;
+            DueDate = dueDate;
+            Priority = priority;
+            Status = TasksStatus.Pending;
+            Type = type;
+            UserId = userId;
+            SetCreatedAt(createdAt);
+        }
+
         public string Title { get; private set; }
         public string? Description { get; private set; }
         public DateTime DueDate { get; private set; }
@@ -45,6 +57,13 @@ namespace ToDo.Domain.Entities
         {
             Status = status;
             UpdatedAt = DateTime.UtcNow;
+        }
+
+        private void SetCreatedAt(DateTime createdAt)
+        {
+            // Usar reflection para definir CreatedAt (apenas para construtor)
+            var property = typeof(BaseEntity).GetProperty("CreatedAt");
+            property?.SetValue(this, createdAt);
         }
     }
 }

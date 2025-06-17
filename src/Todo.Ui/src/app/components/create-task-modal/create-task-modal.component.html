@@ -26,6 +26,15 @@
                             placeholder="Digite a descrição da tarefa (opcional)" rows="3" maxlength="500"></textarea>
                     </div>
 
+                    <div class="space-y-2">
+                        <label for="createdAt" class="text-sm font-medium text-foreground">Data de inicio</label>
+                        <app-custom-datepicker [(ngModel)]="form.startAt" name="startAt" inputId="startAt"
+                            (ngModelChange)="onStartAtChange()"></app-custom-datepicker>
+                        <p class="text-xs text-muted-foreground">
+                            Data em que a tarefa será iniciada. Deixe em branco para usar a data atual.
+                        </p>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div class="space-y-2">
                             <label for="type" class="text-sm font-medium text-foreground">Tipo</label>
@@ -62,7 +71,8 @@
                     <div class="space-y-2" *ngIf="form.isRecurring">
                         <label for="recurrenceEndDate" class="text-sm font-medium text-foreground">Data de Fim da
                             Recorrência *</label>
-                        <app-custom-datepicker [(ngModel)]="form.recurrenceEndDate" inputId="recurrenceEndDate">
+                        <app-custom-datepicker [(ngModel)]="form.recurrenceEndDate" name="recurrenceEndDate"
+                            inputId="recurrenceEndDate">
                         </app-custom-datepicker>
                         <p class="text-xs text-muted-foreground">
                             <span *ngIf="form.type === TaskType.Daily">Serão criadas tarefas diárias até a data

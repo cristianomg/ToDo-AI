@@ -30,6 +30,7 @@ export interface CreateTaskForm {
     priority: TaskPriority;
     isRecurring: boolean;
     recurrenceEndDate?: string;
+    startAt?: string;
 }
 
 export enum TaskStatus {
@@ -75,10 +76,20 @@ export class TaskService extends ApiService {
             type: taskData.type,
             priority: taskData.priority,
             isRecurring: taskData.isRecurring,
-            recurrenceEndDate: taskData.recurrenceEndDate ? new Date(taskData.recurrenceEndDate).toISOString() : null
+            recurrenceEndDate: taskData.recurrenceEndDate ? this.formatDateForBackend(taskData.recurrenceEndDate) : null,
+            startAt: taskData.startAt ? this.formatDateForBackend(taskData.startAt) : null
         };
 
+        console.log('Dados sendo enviados para o backend:', backendData);
+        console.log('startAt sendo enviado:', backendData.startAt);
+
         return this.http.post<Task[]>(this.getUrl('/tasks'), backendData);
+    }
+
+    private formatDateForBackend(dateString: string): string {
+        const [year, month, day] = dateString.split('-').map(Number);
+        const date = new Date(year, month - 1, day, 12, 0, 0); 
+        return date.toISOString();
     }
 
     updateTask(id: number, task: Partial<Task>): Observable<Task> {

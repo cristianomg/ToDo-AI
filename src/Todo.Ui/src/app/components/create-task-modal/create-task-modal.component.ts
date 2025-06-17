@@ -21,7 +21,8 @@ export class CreateTaskModalComponent {
     type: TaskType.Daily,
     priority: TaskPriority.Medium,
     isRecurring: false,
-    recurrenceEndDate: undefined
+    recurrenceEndDate: undefined,
+    startAt: undefined
   };
 
   // Enums para o template
@@ -30,6 +31,8 @@ export class CreateTaskModalComponent {
 
   ngOnInit(): void {
     // Inicializar com a data atual
+    this.form.startAt = this.formatDateForInput(new Date());
+    console.log('Modal - startAt inicializado:', this.form.startAt);
   }
 
   // Método para formatar data para o input HTML (YYYY-MM-DD)
@@ -37,7 +40,9 @@ export class CreateTaskModalComponent {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
+    const formattedDate = `${year}-${month}-${day}`;
+    console.log('Modal - Data formatada:', formattedDate);
+    return formattedDate;
   }
 
   getTypeLabel(type: TaskType): string {
@@ -64,6 +69,9 @@ export class CreateTaskModalComponent {
   }
 
   createTask(): void {
+    console.log('Modal - createTask chamado');
+    console.log('Modal - form.startAt antes de enviar:', this.form.startAt);
+
     if (this.form.title.trim()) {
       this.taskCreated.emit({ ...this.form });
       this.closeModal();
@@ -82,6 +90,10 @@ export class CreateTaskModalComponent {
     }
   }
 
+  onStartAtChange(): void {
+    console.log('Modal - startAt alterado para:', this.form.startAt);
+  }
+
   private resetForm(): void {
     this.form = {
       title: '',
@@ -89,7 +101,8 @@ export class CreateTaskModalComponent {
       type: TaskType.Daily,
       priority: TaskPriority.Medium,
       isRecurring: false,
-      recurrenceEndDate: undefined
+      recurrenceEndDate: undefined,
+      startAt: this.formatDateForInput(new Date())
     };
   }
 }
