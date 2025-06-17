@@ -19,7 +19,7 @@ namespace Todo.Application.Handlers.Commands
         public async Task<List<Tasks>> Handle(CreateTaskCommand request, CancellationToken cancellationToken)
         {
             var tasks = new List<Tasks>();
-            var startDate = request.StartAt ?? DateTime.UtcNow;
+            var startDate = request.StartAt ?? DateTime.Now;
             
             if (!request.IsRecurring || !request.RecurrenceEndDate.HasValue)
             {
@@ -65,7 +65,7 @@ namespace Todo.Application.Handlers.Commands
                 case TaskType.Daily:
                     while (currentDate <= endDate)
                     {
-                        var dueDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59, DateTimeKind.Utc);
+                        var dueDate = new DateTime(currentDate.Year, currentDate.Month, currentDate.Day, 23, 59, 59, DateTimeKind.Local);
                         tasks.Add(new Tasks(
                             request.Title,
                             request.Description,
@@ -106,7 +106,7 @@ namespace Todo.Application.Handlers.Commands
                     while (currentDate <= endDate)
                     {
                         var dueDate = new DateTime(currentDate.Year, currentDate.Month, 
-                            DateTime.DaysInMonth(currentDate.Year, currentDate.Month), 23, 59, 59, DateTimeKind.Utc);
+                            DateTime.DaysInMonth(currentDate.Year, currentDate.Month), 23, 59, 59, DateTimeKind.Local);
                         tasks.Add(new Tasks(
                             request.Title,
                             request.Description,
@@ -134,7 +134,7 @@ namespace Todo.Application.Handlers.Commands
                 TaskType.Monthly => new DateTime(startDate.Year, startDate.Month, DateTime.DaysInMonth(startDate.Year, startDate.Month), 23, 59, 59),
                 
                 _ => throw new ArgumentException("Invalid task type", nameof(type))
-            }, DateTimeKind.Utc);
+            }, DateTimeKind.Local);
         }
 
         private DateTime GetEndOfWeek(DateTime date)
@@ -149,7 +149,7 @@ namespace Todo.Application.Handlers.Commands
             var endOfWeek = date.AddDays(daysUntilEndOfWeek);
             
             // Set time to end of day
-            return DateTime.SpecifyKind(new DateTime(endOfWeek.Year, endOfWeek.Month, endOfWeek.Day, 23, 59, 59), DateTimeKind.Utc);
+            return DateTime.SpecifyKind(new DateTime(endOfWeek.Year, endOfWeek.Month, endOfWeek.Day, 23, 59, 59), DateTimeKind.Local);
         }
     }
 } 

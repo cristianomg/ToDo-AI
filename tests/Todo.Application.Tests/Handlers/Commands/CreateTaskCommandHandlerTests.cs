@@ -26,7 +26,7 @@ namespace Todo.Application.Tests.Handlers.Commands
             {
                 Title = "Tarefa Simples",
                 Description = "Descrição",
-                DueDate = DateTime.UtcNow.AddDays(1),
+                StartAt = DateTime.Now.AddDays(1),
                 Priority = TaskPriority.Medium,
                 Type = TaskType.Daily,
                 UserId = 1,
@@ -56,12 +56,11 @@ namespace Todo.Application.Tests.Handlers.Commands
         public async Task Handle_ShouldUseCustomStartAt_WhenProvided()
         {
             // Arrange
-            var customStartAt = DateTime.UtcNow.AddDays(5); // 5 dias no futuro
+            var customStartAt = DateTime.Now.AddDays(5); // 5 dias no futuro
             var command = new CreateTaskCommand
             {
                 Title = "Tarefa com Data de Início Personalizada",
                 Description = "Descrição",
-                DueDate = DateTime.UtcNow.AddDays(1),
                 StartAt = customStartAt,
                 Priority = TaskPriority.High,
                 Type = TaskType.Weekly,
@@ -81,8 +80,8 @@ namespace Todo.Application.Tests.Handlers.Commands
             Assert.Single(result);
             Assert.Equal(command.Title, result[0].Title);
             // A data de criação deve ser a data atual, não a data de início
-            Assert.True(result[0].CreatedAt >= DateTime.UtcNow.AddMinutes(-1));
-            Assert.True(result[0].CreatedAt <= DateTime.UtcNow.AddMinutes(1));
+            Assert.True(result[0].CreatedAt >= DateTime.Now.AddMinutes(-1));
+            Assert.True(result[0].CreatedAt <= DateTime.Now.AddMinutes(1));
             _mockTaskRepository.Verify(r => r.AddAsync(It.IsAny<Tasks>()), Times.Once);
             _mockTaskRepository.Verify(r => r.SaveChangesAsync(), Times.Once);
         }
@@ -91,12 +90,11 @@ namespace Todo.Application.Tests.Handlers.Commands
         public async Task Handle_ShouldUseCurrentDateTime_WhenStartAtNotProvided()
         {
             // Arrange
-            var beforeExecution = DateTime.UtcNow;
+            var beforeExecution = DateTime.Now;
             var command = new CreateTaskCommand
             {
                 Title = "Tarefa sem Data de Início Personalizada",
                 Description = "Descrição",
-                DueDate = DateTime.UtcNow.AddDays(1),
                 StartAt = null, // Não especificado
                 Priority = TaskPriority.Medium,
                 Type = TaskType.Daily,
@@ -111,7 +109,7 @@ namespace Todo.Application.Tests.Handlers.Commands
 
             // Act
             var result = await _handler.Handle(command, CancellationToken.None);
-            var afterExecution = DateTime.UtcNow;
+            var afterExecution = DateTime.Now;
 
             // Assert
             Assert.Single(result);
@@ -125,7 +123,7 @@ namespace Todo.Application.Tests.Handlers.Commands
         public async Task Handle_ShouldCreateDailyRecurringTasks()
         {
             // Arrange
-            var start = DateTime.UtcNow.Date;
+            var start = DateTime.Now.Date;
             var end = start.AddDays(2); // 3 dias
             var command = new CreateTaskCommand
             {
@@ -162,7 +160,7 @@ namespace Todo.Application.Tests.Handlers.Commands
         public async Task Handle_ShouldCreateWeeklyRecurringTasks()
         {
             // Arrange
-            var start = DateTime.UtcNow.Date;
+            var start = DateTime.Now.Date;
             var end = start.AddDays(14); // 2 semanas
             var command = new CreateTaskCommand
             {
@@ -199,7 +197,7 @@ namespace Todo.Application.Tests.Handlers.Commands
         public async Task Handle_ShouldCreateMonthlyRecurringTasks()
         {
             // Arrange
-            var start = DateTime.UtcNow.Date;
+            var start = DateTime.Now.Date;
             var end = start.AddMonths(2); // 3 meses
             var command = new CreateTaskCommand
             {

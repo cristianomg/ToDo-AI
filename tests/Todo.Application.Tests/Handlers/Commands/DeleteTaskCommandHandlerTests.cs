@@ -20,7 +20,7 @@ namespace Todo.Application.Tests.Handlers.Commands
 
         private Tasks CreateTask(int id, int userId)
         {
-            var task = new Tasks("Task", "Desc", DateTime.UtcNow, ToDo.Domain.Enums.TaskPriority.Medium, ToDo.Domain.Enums.TaskType.Daily, userId);
+            var task = new Tasks("Task", "Desc", DateTime.Now, ToDo.Domain.Enums.TaskPriority.Medium, ToDo.Domain.Enums.TaskType.Daily, userId);
             typeof(Tasks).GetProperty("Id")!.SetValue(task, id);
             return task;
         }

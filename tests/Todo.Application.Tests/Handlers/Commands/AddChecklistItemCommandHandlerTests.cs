@@ -29,7 +29,7 @@ namespace Todo.Application.Tests.Handlers.Commands
 
         private Tasks CreateTask(int id, int userId, List<ChecklistItem>? checklist = null)
         {
-            var task = new Tasks("Test Task", "Description", DateTime.UtcNow, TaskPriority.Medium, TaskType.Daily, userId);
+            var task = new Tasks("Test Task", "Description", DateTime.Now, TaskPriority.Medium, TaskType.Daily, userId);
             // Set Id via reflection (for testing only)
             typeof(Tasks).GetProperty("Id")!.SetValue(task, id);
             if (checklist != null)

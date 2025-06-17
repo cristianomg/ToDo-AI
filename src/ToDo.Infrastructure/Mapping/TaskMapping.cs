@@ -22,6 +22,7 @@ namespace ToDo.Infrastructure.Mapping
                 .HasColumnType("varchar(1000)");
 
             builder.Property(x => x.DueDate)
+              .HasColumnType("timestamp without time zone")
                 .IsRequired();
 
             builder.Property(x => x.Priority)
@@ -37,12 +38,11 @@ namespace ToDo.Infrastructure.Mapping
                 .HasConversion<int>();
 
             builder.Property(x => x.CreatedAt)
-              .HasColumnType("timestamp with time zone")
-              .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                .IsRequired();
+              .HasColumnType("timestamp without time zone")
+              .IsRequired();
 
             builder.Property(x => x.UpdatedAt)
-                .HasColumnType("timestamp with time zone");
+                .HasColumnType("timestamp without time zone");
 
             builder.HasMany(x => x.Checklist)
                 .WithOne(x => x.Task)

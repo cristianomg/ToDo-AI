@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using Todo.Api.Mappings;
 using Todo.Api.Middleware;
-using Todo.Api.Swagger;
 using ToDo.Domain.Repositories;
 using ToDo.Infrastructure;
 using ToDo.Infrastructure.Repositories;
@@ -82,6 +83,20 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while migrating the database.");
         throw;
     }
+}
+
+// Configurar cultura apenas se não estiver em modo invariante
+try
+{
+    var cultureInfo = new CultureInfo("pt-BR");
+    CultureInfo.DefaultThreadCurrentCulture = cultureInfo;
+    CultureInfo.DefaultThreadCurrentUICulture = cultureInfo;
+}
+catch (CultureNotFoundException)
+{
+    // Se a cultura não estiver disponível, usar a cultura invariante
+    var logger = app.Services.GetRequiredService<ILogger<Program>>();
+    logger.LogWarning("Culture 'pt-BR' not available, using invariant culture.");
 }
 
 app.Run(); 

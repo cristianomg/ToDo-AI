@@ -25,7 +25,7 @@ namespace Todo.Application.Tests.Handlers.Commands
 
         private Tasks CreateTask(int id, int userId)
         {
-            var task = new Tasks("Original Title", "Original Description", DateTime.UtcNow, TaskPriority.Medium, TaskType.Daily, userId);
+            var task = new Tasks("Original Title", "Original Description", DateTime.Now, TaskPriority.Medium, TaskType.Daily, userId);
             typeof(Tasks).GetProperty("Id")!.SetValue(task, id);
             return task;
         }

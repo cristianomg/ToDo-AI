@@ -4,7 +4,7 @@
     {
         protected BaseEntity()
         {
-            CreatedAt = DateTime.UtcNow;
+            CreatedAt = DateTime.Now;
         }
 
         public int Id { get; protected set; }

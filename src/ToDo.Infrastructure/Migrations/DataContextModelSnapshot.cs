@@ -62,16 +62,14 @@ namespace ToDo.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000)
                         .HasColumnType("varchar(1000)");
 
                     b.Property<DateTime>("DueDate")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("Priority")
                         .HasColumnType("integer");
@@ -88,7 +86,7 @@ namespace ToDo.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
@@ -109,9 +107,7 @@ namespace ToDo.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -122,7 +118,7 @@ namespace ToDo.Infrastructure.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("timestamp without time zone");
 
                     b.HasKey("Id");
 
@@ -132,70 +128,70 @@ namespace ToDo.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(989),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7260),
                             Name = "John Doe",
                             Role = 1
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(994),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7272),
                             Name = "Jane Smith",
                             Role = 1
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(994),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7273),
                             Name = "Michael Johnson",
                             Role = 1
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(995),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7273),
                             Name = "Emily Davis",
                             Role = 1
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(996),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7274),
                             Name = "Robert Wilson",
                             Role = 1
                         },
                         new
                         {
                             Id = 6,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(996),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7274),
                             Name = "Sarah Brown",
                             Role = 1
                         },
                         new
                         {
                             Id = 7,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(997),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7275),
                             Name = "David Miller",
                             Role = 1
                         },
                         new
                         {
                             Id = 8,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(997),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7275),
                             Name = "Lisa Taylor",
                             Role = 1
                         },
                         new
                         {
                             Id = 9,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(998),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7276),
                             Name = "James Anderson",
                             Role = 1
                         },
                         new
                         {
                             Id = 10,
-                            CreatedAt = new DateTime(2025, 6, 17, 1, 22, 36, 606, DateTimeKind.Utc).AddTicks(998),
+                            CreatedAt = new DateTime(2025, 6, 17, 12, 37, 38, 958, DateTimeKind.Unspecified).AddTicks(7276),
                             Name = "Jennifer Thomas",
                             Role = 1
                         });

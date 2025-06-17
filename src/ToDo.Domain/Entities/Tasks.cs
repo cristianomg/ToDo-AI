@@ -44,19 +44,19 @@ namespace ToDo.Domain.Entities
                 throw new ArgumentException("Title cannot be empty", nameof(title));
 
             Title = title;
-            UpdatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.Now;
         }
 
         public void UpdateDescription(string? description)
         {
             Description = description;
-            UpdatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.Now;
         }
 
         public void UpdateStatus(TasksStatus status)
         {
             Status = status;
-            UpdatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.Now;
         }
 
         private void SetCreatedAt(DateTime createdAt)

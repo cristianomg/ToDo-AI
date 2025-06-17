@@ -23,12 +23,11 @@ namespace ToDo.Infrastructure.Mapping
                 .HasConversion<int>();
 
             builder.Property(x => x.CreatedAt)
-              .HasColumnType("timestamp with time zone")
-              .HasDefaultValueSql("CURRENT_TIMESTAMP")
+              .HasColumnType("timestamp without time zone")
                 .IsRequired();
 
             builder.Property(x => x.UpdatedAt)
-                .HasColumnType("timestamp with time zone");
+                .HasColumnType("timestamp without time zone");
 
             // Seed Data
             builder.HasData(

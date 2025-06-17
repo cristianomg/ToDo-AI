@@ -17,7 +17,7 @@ namespace ToDo.Infrastructure.Repositories
         }
         public async Task<IEnumerable<Tasks>> GetByTypeAndDateAndUserAsync(TaskType type, DateTime date, int userId)
         {
-            var startOfDay = DateTime.SpecifyKind(date.Date, DateTimeKind.Utc);
+            var startOfDay = DateTime.SpecifyKind(date.Date, DateTimeKind.Local);
             var endOfDay = startOfDay.AddDays(1).AddTicks(-1);
 
             var query = GetQueryable()
